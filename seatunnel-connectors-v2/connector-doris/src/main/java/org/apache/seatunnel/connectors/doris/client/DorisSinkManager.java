@@ -59,14 +59,14 @@ public class DorisSinkManager {
         dorisStreamLoadVisitor = new DorisStreamLoadVisitor(sinkConfig, fileNames);
     }
 
-    private void tryInit() throws IOException {
+    private void tryInit() {
         if (initialize) {
             return;
         }
         initialize = true;
 
         scheduler = Executors.newSingleThreadScheduledExecutor(
-                new ThreadFactoryBuilder().setNameFormat("Doris-sink-output-%s").build());
+            new ThreadFactoryBuilder().setNameFormat("Doris-sink-output-%s").build());
         scheduledFuture = scheduler.scheduleAtFixedRate(() -> {
             try {
                 flush();
@@ -124,12 +124,12 @@ public class DorisSinkManager {
 
                 try {
                     long backoff = Math.min(sinkConfig.getRetryBackoffMultiplierMs() * i,
-                            sinkConfig.getMaxRetryBackoffMs());
+                        sinkConfig.getMaxRetryBackoffMs());
                     Thread.sleep(backoff);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                     throw new DorisConnectorException(CommonErrorCode.FLUSH_DATA_FAILED,
-                            "Unable to flush, interrupted while doing another attempt.", e);
+                        "Unable to flush, interrupted while doing another attempt.", e);
                 }
             }
         }
@@ -145,10 +145,9 @@ public class DorisSinkManager {
     }
 
     public String createBatchLabel() {
-        String labelPrefix = "";
         if (!Strings.isNullOrEmpty(sinkConfig.getLabelPrefix())) {
-            labelPrefix = sinkConfig.getLabelPrefix();
+            return String.format("%s%s", sinkConfig.getLabelPrefix(), UUID.randomUUID());
         }
-        return String.format("%s%s", labelPrefix, UUID.randomUUID().toString());
+        return UUID.randomUUID().toString();
     }
 }

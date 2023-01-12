@@ -20,7 +20,9 @@ package org.apache.seatunnel.connectors.doris.exception;
 import org.apache.seatunnel.common.exception.SeaTunnelErrorCode;
 
 public enum DorisConnectorErrorCode implements SeaTunnelErrorCode {
-    WRITE_RECORDS_FAILED("DORIS-01", "Writing records to Doris failed.");
+    WRITE_RECORDS_FAILED("DORIS-01", "Writing records to Doris failed."),
+    UNSUPPORTED_FORMAT_TYPE("DORIS-02", "Unsupported format type"),
+    ;
 
     private final String code;
     private final String description;
