@@ -75,13 +75,12 @@ public final class CheckConfigUtil {
     }
 
     public static boolean isValidParam(Config config, String param) {
-        boolean isValidParam = true;
         if (!config.hasPath(param)) {
-            isValidParam = false;
+            return false;
         } else if (config.getAnyRef(param) instanceof List) {
-            isValidParam = !((List<?>) config.getAnyRef(param)).isEmpty();
+            return !((List<?>) config.getAnyRef(param)).isEmpty();
         }
-        return isValidParam;
+        return true;
     }
 
     /** merge all check result */
